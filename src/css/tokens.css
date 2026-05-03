@@ -1,0 +1,91 @@
+/* SWIM_SCORE_PRO v3.0.4-STABLE Design Tokens */
+
+:root {
+  /* Colors - Light Mode Default */
+  --color-background: #f9f9f9;
+  --color-surface: #FAFAFA;
+  --color-surface-input: #ffffff;
+  --color-border-primary: #D1D1D1;
+  --color-border-secondary: #7e7576;
+  --color-text-primary: #1a1c1c;
+  --color-text-secondary: #4c4546;
+  --color-text-metadata: #626262;
+  --color-action-bg: #ffffff;
+  --color-action-text: #000000;
+  --color-badge-bg: #D1D1D1;
+  --color-badge-text: #000000;
+  --color-status-success: #10B981;
+  --color-status-warn: #F59E0B;
+  --color-status-error: #EF4444;
+  --color-focus-outline: #000000;
+  --color-row-highlight: #D1F4E6;
+
+  /* Typography */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  
+  --font-size-logo: 12px;
+  --font-size-heading-lg: 24px;
+  --font-size-heading-md: 20px;
+  --font-size-body: 14px;
+  --font-size-label: 12px;
+  --font-size-data: 13px;
+  
+  --font-weight-normal: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  --card-padding: 24px;
+  --grid-gutter: 16px;
+  --row-height-min: 48px;
+  --input-height: 40px;
+  --button-height: 44px;
+  --container-max: 1440px;
+  --sidebar-width: 220px;
+
+  /* Border Radius */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Transitions */
+  --transition-default: 150ms ease-in-out;
+  --transition-row: background-color 100ms;
+
+  /* Shadows */
+  --shadow-card-hover: 0 2px 4px rgba(0,0,0,0.08);
+
+  /* Z-Index */
+  --z-dropdown: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+  --z-banner: 50;
+
+  /* Icons */
+  --icon-size-nav: 20px;
+  --icon-size-action: 24px;
+  --icon-size-table: 16px;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] {
+  --color-background: #121212;
+  --color-surface: #1E1E1E;
+  --color-surface-input: #2D2D2D;
+  --color-border-primary: #404040;
+  --color-border-secondary: #525252;
+  --color-text-primary: #E5E5E5;
+  --color-text-secondary: #A3A3A3;
+  --color-text-metadata: #737373;
+  --color-action-bg: #2D2D2D;
+  --color-action-text: #FFFFFF;
+  --color-badge-bg: #404040;
+  --color-badge-text: #FFFFFF;
+}

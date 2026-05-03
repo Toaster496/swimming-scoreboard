@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Feed • SwimScorePro</title>
+  <link rel="stylesheet" href="../src/css/tokens.css">
+  <link rel="stylesheet" href="../src/css/base.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+</head>
+<body data-page="live-feed">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Browser Chrome -->
+  <div class="browser-chrome no-print">
+    <div class="window-controls">
+      <span class="window-control-dot close"></span>
+      <span class="window-control-dot minimize"></span>
+      <span class="window-control-dot maximize"></span>
+    </div>
+    <div class="url-bar">
+      <span class="padlock-icon">🔒</span>
+      <span>swim-score-pro.local/live</span>
+    </div>
+  </div>
+
+  <!-- Global Header (Public - No Auth Required) -->
+  <header class="global-header no-print">
+    <div class="header-left">
+      <a href="/pages/live-feed.html" class="logo">SWIM_SCORE_PRO</a>
+    </div>
+    
+    <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+      <button class="nav-tab" role="tab" aria-selected="true">LIVE_FEEDS</button>
+      <button class="nav-tab" role="tab" aria-selected="false" disabled title="Read-only for viewers">MEET_MANAGER</button>
+      <button class="nav-tab" role="tab" aria-selected="false" disabled title="Read-only for viewers">ATHLETES</button>
+      <button class="nav-tab" role="tab" aria-selected="false" disabled title="Read-only for viewers">RECORDS</button>
+    </nav>
+    
+    <div class="header-right">
+      <div class="live-indicator" aria-label="Live data streaming">
+        <span class="live-dot" aria-hidden="true"></span>
+        LIVE
+      </div>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◑</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="main-content" style="margin-left: 0;">
+    <!-- Page Header -->
+    <header class="page-header">
+      <h1 class="page-title">LIVE RESULTS</h1>
+      <p class="page-subtitle">Real-time competition results and rankings</p>
+    </header>
+
+    <!-- Connection Banner -->
+    <div id="connection-banner" class="banner banner-error hidden" role="alert">
+      Reconnecting... <span class="spinner" style="display: inline-block; vertical-align: middle; margin-left: 8px;"></span>
+    </div>
+
+    <!-- Control Bar -->
+    <div class="control-bar">
+      <div class="flex items-center gap-md">
+        <h2 style="font-size: 16px; font-weight: 600;">LIVE RESULTS</h2>
+        
+        <!-- Auto-Refresh Toggle -->
+        <div class="flex items-center gap-sm">
+          <span class="text-metadata" style="font-size: 12px;">AUTO-REFRESH</span>
+          <div
+            id="auto-refresh-toggle"
+            class="toggle"
+            role="switch"
+            aria-checked="true"
+            tabindex="0"
+            aria-label="Toggle auto-refresh"
+          >
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+      
+      <span id="last-updated" class="last-updated">LAST UPDATED: --:--:--.-- UTC</span>
+    </div>
+
+    <!-- Filter Row -->
+    <div class="filter-row">
+      <select id="filter-event" class="filter-select" aria-label="Select event">
+        <option value="">2024 Nationals ▼</option>
+        <option value="121">100m Freestyle - Final</option>
+        <option value="122">200m Butterfly - Heats</option>
+        <option value="123">4x100m Relay - Final</option>
+      </select>
+      
+      <select id="filter-heat" class="filter-select" aria-label="Select heat">
+        <option value="">100m Freestyle - Final ▼</option>
+        <option value="1">Heat 1</option>
+        <option value="2">Heat 2</option>
+        <option value="3">Final</option>
+      </select>
+      
+      <select id="filter-gender" class="filter-select" aria-label="Select gender">
+        <option value="">Men ▼</option>
+        <option value="M">Men</option>
+        <option value="W">Women</option>
+        <option value="X">Mixed</option>
+      </select>
+      
+      <input
+        type="search"
+        id="filter-search"
+        class="filter-search"
+        placeholder="🔍 Enter query..."
+        aria-label="Search athletes"
+        minlength="2"
+      >
+      
+      <button id="export-csv-btn" class="btn">EXPORT CSV</button>
+      <button id="clear-filters-btn" class="btn">CLEAR FILTERS</button>
+    </div>
+
+    <!-- Results Table -->
+    <div class="table-container">
+      <table class="table" role="table" aria-label="Live results table">
+        <thead>
+          <tr>
+            <th scope="col">RANK</th>
+            <th scope="col">LANE</th>
+            <th scope="col">NAME</th>
+            <th scope="col">TEAM</th>
+            <th scope="col" class="mono">TIME</th>
+            <th scope="col" class="mono">RT*</th>
+            <th scope="col" class="mono">DELTA</th>
+          </tr>
+        </thead>
+        <tbody id="live-results-body">
+          <!-- Results will be populated by JavaScript -->
+          <tr>
+            <td colspan="7" class="text-center">
+              <span class="spinner"></span> Loading results...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <!-- RT Footnote -->
+      <p class="text-metadata" style="padding: var(--spacing-sm); font-size: 11px;">
+        *RT = Reaction Time
+      </p>
+    </div>
+
+    <!-- No Results State (Hidden by default) -->
+    <div id="no-results-state" class="empty-state hidden">
+      <div class="empty-state-icon" aria-hidden="true">📭</div>
+      <h3 class="empty-state-title">No athletes match your filters</h3>
+      <button class="btn empty-state-action" onclick="document.getElementById('clear-filters-btn').click()">CLEAR FILTERS</button>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span id="auto-refresh-status" class="pagination-info mono">AUTO-REFRESH: ENABLED (2s interval)</span>
+      
+      <div class="pagination-buttons">
+        <button class="page-btn" aria-label="Previous page" disabled>◀</button>
+        <button class="page-btn" aria-current="page">1</button>
+        <button class="page-btn" aria-label="Page 2">2</button>
+        <button class="page-btn" aria-label="Next page">▶</button>
+      </div>
+    </div>
+
+    <!-- Live Announcer for Screen Readers -->
+    <div id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

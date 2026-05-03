@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwimScorePro v3.0.4-STABLE</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f9f9f9;
+      color: #1a1c1c;
+    }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    .version { color: #626262; margin-bottom: 32px; }
+    .card {
+      background: #FAFAFA;
+      border: 1px solid #D1D1D1;
+      border-radius: 4px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card h2 { font-size: 18px; margin: 0 0 8px 0; }
+    .card p { color: #4c4546; margin: 0 0 16px 0; }
+    .card a {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .card a:hover { background: #333; }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #D1D1D1;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    ul { color: #4c4546; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>SWIM_SCORE_PRO</h1>
+  <p class="version">v3.0.4-STABLE — Professional Swimming Score Management System</p>
+
+  <div class="card">
+    <h2>🔐 Login Page</h2>
+    <p>System authentication with MFA support. Authorized personnel only.</p>
+    <span class="badge">Public</span>
+    <br><br>
+    <a href="/pages/login.html">Open Login →</a>
+  </div>
+
+  <div class="card">
+    <h2>📊 Admin Dashboard</h2>
+    <p>System administration, user management, and diagnostics.</p>
+    <span class="badge">Admin Only</span>
+    <br><br>
+    <a href="/pages/dashboard.html">Open Dashboard →</a>
+  </div>
+
+  <div class="card">
+    <h2>⏱ Time Entry Console</h2>
+    <p>Manual time entry for officials with validation checks.</p>
+    <span class="badge">Timekeeper</span>
+    <br><br>
+    <a href="/pages/time-entry.html">Open Console →</a>
+  </div>
+
+  <div class="card">
+    <h2>📺 Live Results Feed</h2>
+    <p>Real-time competition results with auto-refresh. No authentication required.</p>
+    <span class="badge">Public</span>
+    <br><br>
+    <a href="/pages/live-feed.html">Open Live Feed →</a>
+  </div>
+
+  <div class="card">
+    <h2>📋 Audit Logs</h2>
+    <p>Immutable system audit trail with filtering and export.</p>
+    <span class="badge">Admin Only</span>
+    <br><br>
+    <a href="/pages/audit-logs.html">View Logs →</a>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid #D1D1D1;">
+    <h3 style="font-size: 14px; margin-bottom: 12px;">Implementation Notes:</h3>
+    <ul>
+      <li><strong>Login credentials (mock):</strong> admin.sys@swimscore.pro / password123 / OTP: 123456</li>
+      <li><strong>Role-based views:</strong> Admin (full), Timekeeper (timer/heats), Viewer (live feed only)</li>
+      <li><strong>Accessibility:</strong> WCAG 2.1 AA compliant with keyboard navigation and ARIA labels</li>
+      <li><strong>Dark mode:</strong> Toggle available in header (◑ icon)</li>
+      <li><strong>Typography:</strong> Inter for UI, JetBrains Mono for data/times</li>
+      <li><strong>Colors:</strong> Zinc/gray scale with high-contrast borders (#D1D1D1)</li>
+    </ul>
+  </div>
+</body>
+</html>

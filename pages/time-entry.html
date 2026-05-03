@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Entry • SwimScorePro</title>
+  <link rel="stylesheet" href="../src/css/tokens.css">
+  <link rel="stylesheet" href="../src/css/base.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+</head>
+<body data-page="time-entry">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Browser Chrome -->
+  <div class="browser-chrome no-print">
+    <div class="window-controls">
+      <span class="window-control-dot close"></span>
+      <span class="window-control-dot minimize"></span>
+      <span class="window-control-dot maximize"></span>
+    </div>
+    <div class="url-bar">
+      <span class="padlock-icon">🔒</span>
+      <span>local.timekeeper.console</span>
+    </div>
+  </div>
+
+  <!-- Global Header -->
+  <header class="global-header no-print">
+    <div class="header-left">
+      <a href="/pages/dashboard.html" class="logo">SWIM_SCORE_PRO</a>
+      <span class="role-badge">TIMEKEEPER</span>
+      <span id="session-timer" class="session-timer mono">SESSION: 02:45:12</span>
+    </div>
+    
+    <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+      <button class="nav-tab" role="tab" aria-selected="false" data-target="/pages/live-feed.html">LIVE_FEEDS</button>
+      <button class="nav-tab" role="tab" aria-selected="true">MEET_MANAGER</button>
+      <button class="nav-tab" role="tab" aria-selected="false">ATHLETES</button>
+      <button class="nav-tab" role="tab" aria-selected="false">RECORDS</button>
+    </nav>
+    
+    <div class="header-right">
+      <button class="icon-btn" aria-label="Notifications">🔔</button>
+      <button class="icon-btn" aria-label="History">🕐</button>
+      <button class="icon-btn" aria-label="Account">👤</button>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◑</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar no-print" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-header">
+      <h2 class="pool-name">OLYMPIC_POOL_A</h2>
+      <span class="version-tag">V3.0.4-STABLE</span>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="/pages/dashboard.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">▦</span>
+        Dashboard
+      </a>
+      <a href="/pages/lane-config.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">⟨LAN⟩</span>
+        Lane Config
+      </a>
+      <a href="/pages/heat-sheets.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">☰</span>
+        Heat Sheets
+      </a>
+      <a href="/pages/time-entry.html" class="nav-item" aria-current="page">
+        <span class="nav-item-icon" aria-hidden="true">⏱</span>
+        Official Timer
+      </a>
+      <a href="/pages/system-logs.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">⌨</span>
+        System Logs
+      </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button class="btn btn-full" id="generate-report-btn" disabled>GENERATE REPORT</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="time-entry-header">
+        <h1 class="page-title" style="margin: 0;">TIME ENTRY CONSOLE</h1>
+        <span class="manual-entry-badge">MANUAL ENTRY</span>
+      </div>
+      <p class="page-subtitle">Record official times for current heat.</p>
+    </header>
+
+    <!-- Error Banner (Hidden by default) -->
+    <div id="submission-error-banner" class="banner banner-error hidden" role="alert">
+      Submission failed. Error code: <span id="error-code">ERR_NETWORK</span>
+      <button class="btn" style="margin-left: var(--spacing-md);" onclick="TimeEntryController.submitTime()">RETRY</button>
+    </div>
+
+    <div class="flex gap-lg">
+      <!-- Time Entry Form -->
+      <div class="time-entry-container" style="flex: 1;">
+        <!-- Context Row -->
+        <div class="context-row">
+          <div class="context-item">
+            <label class="input-label">EVENT ID</label>
+            <span id="event-id-value" class="context-value mono">EV-204-M</span>
+          </div>
+          <div class="context-item">
+            <label class="input-label">LANE</label>
+            <span id="lane-value" class="context-value mono">04</span>
+          </div>
+        </div>
+
+        <!-- Swimmer Section -->
+        <div class="form-group" style="margin-bottom: var(--spacing-lg);">
+          <label class="input-label">SWIMMER NAME</label>
+          <span id="swimmer-name-value" class="context-value" style="font-size: 16px; font-weight: 600;">PHELPS, M.</span>
+        </div>
+
+        <!-- Time Input -->
+        <div class="form-group" style="margin-bottom: var(--spacing-lg);">
+          <label class="input-label" for="time-display">TIME INPUT</label>
+          <span class="input-helper" style="margin-bottom: var(--spacing-sm);">HH:MM:SS.MS format</span>
+          <div
+            id="time-display"
+            class="time-display mono"
+            tabindex="0"
+            role="textbox"
+            aria-label="Time input display. Click to edit."
+            aria-readonly="true"
+          >00:00:00.00</div>
+        </div>
+
+        <!-- Verification Checkbox -->
+        <div class="verification-row">
+          <input
+            type="checkbox"
+            id="verify-checkbox"
+            class="checkbox"
+            aria-label="Confirm time was verified against backup timing pad"
+          >
+          <label for="verify-checkbox" class="text-secondary">
+            VERIFIED ENTRY — Confirm time against backup pad.
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          id="submit-time-btn"
+          class="btn btn-primary btn-full"
+          disabled
+        >
+          SUBMIT TIME
+        </button>
+
+        <!-- Validation Panel -->
+        <div id="validation-panel" class="validation-panel">
+          <div class="flex justify-between items-center" style="margin-bottom: var(--spacing-md);">
+            <h3 class="validation-header">VALIDATION CHECKS</h3>
+            <button id="validation-toggle" class="icon-btn" aria-label="Collapse validation panel">▲</button>
+          </div>
+          
+          <div id="format-check" class="validation-check">
+            <span class="check-icon" aria-hidden="true">✓</span> Format Check
+          </div>
+          
+          <div id="range-check" class="validation-check">
+            <span class="check-icon" aria-hidden="true">✓</span> Range Check (+/-10% vs heat average)
+          </div>
+          
+          <div id="duplicate-alert" class="validation-check hidden">
+            <span class="warn-icon" aria-hidden="true">⚠</span> Duplicate Alert: Time matches Lane 2 submission — confirm?
+          </div>
+        </div>
+
+        <!-- Keyboard Shortcuts Hint -->
+        <p class="text-metadata" style="margin-top: var(--spacing-lg); font-size: 11px;">
+          <strong>Keyboard shortcuts:</strong> Ctrl+T: Focus time | Ctrl+S: Submit | Esc: Collapse panel
+        </p>
+      </div>
+
+      <!-- Recent Submissions Sidebar -->
+      <aside class="recent-submissions" aria-labelledby="recent-submissions-title">
+        <div class="recent-header">
+          <h3 id="recent-submissions-title" style="font-size: 12px; font-weight: 700; text-transform: uppercase;">RECENT SUBMISSIONS</h3>
+          <select id="heat-select" class="heat-select" aria-label="Select heat to view">
+            <option value="1">Heat 01</option>
+            <option value="2">Heat 02</option>
+            <option value="3">Heat 03</option>
+            <option value="4">Heat 04</option>
+            <option value="5">Heat 05</option>
+            <option value="6">Heat 06</option>
+            <option value="7">Heat 07</option>
+            <option value="8">Heat 08</option>
+          </select>
+        </div>
+
+        <!-- Submissions Table -->
+        <div class="table-container" style="border: none;">
+          <table class="table" style="border: none;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--color-border-primary);">
+                <th style="padding: var(--spacing-xs); width: 32px;">LN</th>
+                <th style="padding: var(--spacing-xs);">NAME</th>
+                <th style="padding: var(--spacing-xs); width: 80px;" class="mono">TIME</th>
+                <th style="padding: var(--spacing-xs); width: 32px;">ST</th>
+              </tr>
+            </thead>
+            <tbody id="recent-submissions-body">
+              <tr class="submission-row">
+                <td class="mono">01</td>
+                <td>SMITH, J.</td>
+                <td class="mono">01:54.32</td>
+                <td><span class="qual-badge" aria-label="Qualified for final">Q</span></td>
+              </tr>
+              <tr class="submission-row">
+                <td class="mono">02</td>
+                <td>JOHNSON, T.</td>
+                <td class="mono">01:55.01</td>
+                <td><span class="provisional-badge" aria-label="Provisional time">@</span></td>
+              </tr>
+              <tr class="submission-row">
+                <td class="mono">03</td>
+                <td>DAVIS, R.</td>
+                <td class="mono">01:53.98</td>
+                <td></td>
+              </tr>
+              <tr class="submission-row">
+                <td class="mono">04</td>
+                <td>PHELPS, M.</td>
+                <td class="mono pending-time" aria-label="Awaiting time entry">--:--:--</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div id="no-submissions-state" class="empty-state hidden" style="padding: var(--spacing-lg);">
+          <p class="text-metadata">No submissions yet</p>
+        </div>
+
+        <div class="sidebar-footer" style="margin-top: var(--spacing-md);">
+          <button class="btn btn-full">GENERATE REPORT</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Session Warning Modal -->
+  <div id="session-warning-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="session-warning-title">
+    <div class="modal">
+      <h2 id="session-warning-title" class="modal-header">Session Expiring Soon</h2>
+      <p class="text-secondary">Your session will expire in <span class="countdown mono">05:00</span></p>
+      <div class="modal-footer">
+        <button class="btn" onclick="SecurityManager.logout()">Logout</button>
+        <button class="btn btn-primary" onclick="SecurityManager.extendSession()">Extend Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../src/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Logs • SwimScorePro</title>
+  <link rel="stylesheet" href="../src/css/tokens.css">
+  <link rel="stylesheet" href="../src/css/base.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+</head>
+<body data-page="audit-logs">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="browser-chrome no-print">
+    <div class="window-controls">
+      <span class="window-control-dot close"></span>
+      <span class="window-control-dot minimize"></span>
+      <span class="window-control-dot maximize"></span>
+    </div>
+    <div class="url-bar">
+      <span class="padlock-icon">🔒</span>
+      <span>admin.swimscorepro.com/system/audit-logs</span>
+    </div>
+  </div>
+
+  <header class="global-header no-print">
+    <div class="header-left">
+      <a href="/pages/dashboard.html" class="logo">SWIM_SCORE_PRO</a>
+      <span class="role-badge">ADMIN</span>
+      <span id="session-timer" class="session-timer mono">SESSION: 02:45:12</span>
+    </div>
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab" role="tab" aria-selected="false" data-target="/pages/live-feed.html">LIVE_FEEDS</button>
+      <button class="nav-tab" role="tab" aria-selected="true">MEET_MANAGER</button>
+      <button class="nav-tab" role="tab" aria-selected="false">ATHLETES</button>
+      <button class="nav-tab" role="tab" aria-selected="false">RECORDS</button>
+    </nav>
+    <div class="header-right">
+      <button class="icon-btn" aria-label="Notifications">🔔</button>
+      <button class="icon-btn" aria-label="Account">👤</button>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◑</button>
+    </div>
+  </header>
+
+  <aside class="sidebar no-print">
+    <div class="sidebar-header">
+      <h2 class="pool-name">OLYMPIC_POOL_A</h2>
+      <span class="version-tag">V3.0.4-STABLE</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/pages/dashboard.html" class="nav-item"><span class="nav-item-icon">▦</span> Dashboard</a>
+      <a href="/pages/lane-config.html" class="nav-item"><span class="nav-item-icon">⟨LAN⟩</span> Lane Config</a>
+      <a href="/pages/heat-sheets.html" class="nav-item"><span class="nav-item-icon">☰</span> Heat Sheets</a>
+      <a href="/pages/time-entry.html" class="nav-item"><span class="nav-item-icon">⏱</span> Official Timer</a>
+      <a href="/pages/system-logs.html" class="nav-item" aria-current="page"><span class="nav-item-icon">⌨</span> System Logs</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn btn-full" disabled>GENERATE REPORT</button>
+    </div>
+  </aside>
+
+  <main id="main-content" class="main-content">
+    <header class="page-header">
+      <nav aria-label="Breadcrumb" style="margin-bottom: var(--spacing-md);">
+        <ol class="flex gap-sm text-metadata" style="font-size: 12px; list-style: none;">
+          <li><a href="#" style="color: inherit;">OLYMPIC_POOL_A</a></li>
+          <li>›</li>
+          <li><a href="#" style="color: inherit;">SWIM_SCORE_PRO</a></li>
+          <li>›</li>
+          <li aria-current="page">System Audit Log</li>
+        </ol>
+      </nav>
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="page-title">System Audit Log</h1>
+          <p class="page-subtitle">Immutable record of system configuration and access events.</p>
+        </div>
+        <button id="export-audit-btn" class="btn">📤 EXPORT CSV</button>
+      </div>
+    </header>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel">
+      <div class="filter-field">
+        <label class="input-label" for="filter-start-date">TIME WINDOW</label>
+        <div class="date-range-input">
+          <input type="datetime-local" id="filter-start-date" class="date-input" value="2023-10-24T00:00">
+          <span class="text-metadata">-</span>
+          <input type="datetime-local" id="filter-end-date" class="date-input" value="2023-10-25T23:59">
+        </div>
+        <span class="input-helper">UTC timezone</span>
+      </div>
+      
+      <div class="filter-field">
+        <label class="input-label" for="filter-event-type">EVENT CLASSIFICATION</label>
+        <select id="filter-event-type" class="input">
+          <option value="">ALL EVENTS ▼</option>
+          <option value="AUTH">AUTH</option>
+          <option value="DATA_UPDATE">DATA_UPDATE</option>
+          <option value="CONFIG_CHANGE">CONFIG_CHANGE</option>
+          <option value="SYSTEM">SYSTEM</option>
+        </select>
+      </div>
+      
+      <div class="filter-field">
+        <label class="input-label" for="filter-target">TARGET ENTITY</label>
+        <input type="search" id="filter-target" class="input" placeholder="🔍 UUID, Username, or IP..." minlength="3">
+      </div>
+    </div>
+
+    <button id="reset-filters-btn" class="btn" style="margin-bottom: var(--spacing-md);">RESET FILTERS</button>
+
+    <!-- Logs Table -->
+    <div class="table-container">
+      <table class="table" role="table" aria-label="Audit logs">
+        <thead>
+          <tr>
+            <th scope="col" class="mono">TIMESTAMP (UTC)</th>
+            <th scope="col" class="mono">IP ADDRESS</th>
+            <th scope="col">USER/ENTITY</th>
+            <th scope="col">ACTION DETAILS</th>
+            <th scope="col">MODULE</th>
+            <th scope="col">SEVERITY</th>
+            <th scope="col">STATUS</th>
+          </tr>
+        </thead>
+        <tbody id="audit-logs-body">
+          <tr>
+            <td colspan="7" class="text-center"><span class="spinner"></span> Loading logs...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div id="no-logs-state" class="empty-state hidden">
+      <div class="empty-state-icon">📭</div>
+      <h3 class="empty-state-title">No logs match your filters</h3>
+      <button class="btn empty-state-action" onclick="document.getElementById('reset-filters-btn').click()">RESET FILTERS</button>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span id="pagination-info" class="pagination-info mono">Showing 5 of 1,024 entries</span>
+      <div class="pagination-buttons">
+        <button id="pagination-prev" class="page-btn" aria-label="Previous page" disabled>[&lt;]</button>
+        <button class="page-btn" aria-current="page">1</button>
+        <button class="page-btn" aria-label="Page 2">2</button>
+        <button class="page-btn" aria-label="Page 3">3</button>
+        <span class="text-metadata" style="align-self: center;">...</span>
+        <button class="page-btn" aria-label="Page 64">64</button>
+        <button id="pagination-next" class="page-btn" aria-label="Next page">[&gt;]</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="../src/js/app.js"></script>
+</body>
+</html>
