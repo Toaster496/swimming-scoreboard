@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin • SwimScorePro</title>
+  <link rel="stylesheet" href="../src/css/tokens.css">
+  <link rel="stylesheet" href="../src/css/base.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+</head>
+<body data-page="dashboard">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Browser Chrome -->
+  <div class="browser-chrome no-print">
+    <div class="window-controls">
+      <span class="window-control-dot close"></span>
+      <span class="window-control-dot minimize"></span>
+      <span class="window-control-dot maximize"></span>
+    </div>
+    <div class="url-bar">
+      <span class="padlock-icon">🔒</span>
+      <span>dashboard.swimscore.pro/admin</span>
+    </div>
+  </div>
+
+  <!-- Global Header -->
+  <header class="global-header no-print">
+    <div class="header-left">
+      <a href="/pages/dashboard.html" class="logo">SWIM_SCORE_PRO</a>
+      <span class="role-badge">ADMIN</span>
+      <span id="session-timer" class="session-timer mono">SESSION: 02:45:12</span>
+    </div>
+    
+    <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+      <button class="nav-tab" role="tab" aria-selected="false" data-target="/pages/live-feed.html">LIVE_FEEDS</button>
+      <button class="nav-tab" role="tab" aria-selected="true">MEET_MANAGER</button>
+      <button class="nav-tab" role="tab" aria-selected="false" data-target="/pages/athletes.html">ATHLETES</button>
+      <button class="nav-tab" role="tab" aria-selected="false" data-target="/pages/records.html">RECORDS</button>
+    </nav>
+    
+    <div class="header-right">
+      <button class="icon-btn" aria-label="Notifications">
+        🔔
+        <span class="notification-badge hidden">3</span>
+      </button>
+      <button class="icon-btn" aria-label="History">🕐</button>
+      <button class="icon-btn" aria-label="Account">👤</button>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">◑</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar no-print" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-header">
+      <h2 class="pool-name">OLYMPIC_POOL_A</h2>
+      <span class="version-tag">V3.0.4-STABLE</span>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="/pages/dashboard.html" class="nav-item" aria-current="page">
+        <span class="nav-item-icon" aria-hidden="true">▦</span>
+        Dashboard
+      </a>
+      <a href="/pages/lane-config.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">⟨LAN⟩</span>
+        Lane Config
+      </a>
+      <a href="/pages/heat-sheets.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">☰</span>
+        Heat Sheets
+      </a>
+      <a href="/pages/time-entry.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">⏱</span>
+        Official Timer
+      </a>
+      <a href="/pages/system-logs.html" class="nav-item">
+        <span class="nav-item-icon" aria-hidden="true">⌨</span>
+        System Logs
+      </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button class="btn btn-full" id="generate-report-btn" disabled>GENERATE REPORT</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content" class="main-content">
+    <!-- Page Header -->
+    <header class="page-header">
+      <h1 class="page-title">System Administration</h1>
+      <p class="page-subtitle">Manage global settings, user access, and system diagnostics.</p>
+    </header>
+
+    <!-- Connection Banner (Hidden by default) -->
+    <div id="connection-banner" class="banner banner-error hidden" role="alert">
+      Connection lost — Reconnecting...
+    </div>
+
+    <!-- Bento Grid Layout -->
+    <div class="bento-grid">
+      <!-- Main Cards Grid -->
+      <div class="bento-grid-main">
+        <div class="card-grid-2x2">
+          <!-- Card 1: Timekeeper Mode -->
+          <div class="card" data-action="timekeeper" tabindex="0" role="button" aria-label="Timekeeper Mode: Manual override and precision entry form">
+            <div class="card-header">
+              <span aria-hidden="true">⏱</span>
+              <h3 class="card-title">Timekeeper Mode</h3>
+              <span style="margin-left: auto; color: var(--color-text-metadata);" aria-hidden="true">↗</span>
+            </div>
+            <p class="card-subtitle">Manual override and precision entry form.</p>
+          </div>
+
+          <!-- Card 2: Live Leaderboard -->
+          <div class="card" data-action="leaderboard" tabindex="0" role="button" aria-label="Live Leaderboard: Real-time charting and data visualization">
+            <div class="card-header">
+              <span aria-hidden="true">🏆</span>
+              <h3 class="card-title">Live Leaderboard</h3>
+              <span style="margin-left: auto; color: var(--color-text-metadata);" aria-hidden="true">↗</span>
+            </div>
+            <p class="card-subtitle">Real-time charting and data visualization.</p>
+          </div>
+
+          <!-- Card 3: Manage Users (Admin only) -->
+          <div class="card" data-action="users" data-requires-role="ADMIN" tabindex="0" role="button" aria-label="Manage Users: Roles, permissions, and access control">
+            <div class="card-header">
+              <span aria-hidden="true">👥</span>
+              <h3 class="card-title">Manage Users</h3>
+              <span style="margin-left: auto; color: var(--color-text-metadata);" aria-hidden="true">↗</span>
+            </div>
+            <p class="card-subtitle">Roles, permissions, and access control.</p>
+          </div>
+
+          <!-- Card 4: System Audit Logs (Admin only) -->
+          <div class="card" data-action="audit" data-requires-role="ADMIN" tabindex="0" role="button" aria-label="System Audit Logs: Security events and transaction history">
+            <div class="card-header">
+              <span aria-hidden="true">🛡</span>
+              <h3 class="card-title">System Audit Logs</h3>
+              <span style="margin-left: auto; color: var(--color-text-metadata);" aria-hidden="true">↗</span>
+            </div>
+            <p class="card-subtitle">Security events and transaction history.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Status Widget -->
+      <aside class="status-widget" aria-labelledby="status-widget-title">
+        <div class="status-widget-header">
+          <span id="status-widget-title">SYSTEM STATUS</span>
+          <span aria-hidden="true">💾</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Database</span>
+          <span class="badge badge-success">ONLINE</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">Sync Target</span>
+          <span class="badge">ACTIVE</span>
+        </div>
+        
+        <div class="status-row">
+          <span class="status-label">API Latency</span>
+          <span class="status-value mono">24ms</span>
+        </div>
+        
+        <div class="sidebar-footer">
+          <button class="btn btn-full" id="run-diagnostics-btn">RUN DIAGNOSTICS</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Empty State Example (Hidden by default) -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-state-icon" aria-hidden="true">📭</div>
+      <h3 class="empty-state-title">No active meets scheduled</h3>
+      <button class="btn btn-primary empty-state-action">CREATE MEET</button>
+    </div>
+  </main>
+
+  <!-- Session Warning Modal -->
+  <div id="session-warning-modal" class="modal-overlay hidden" role="dialog" aria-labelledby="session-warning-title">
+    <div class="modal">
+      <h2 id="session-warning-title" class="modal-header">Session Expiring Soon</h2>
+      <p class="text-secondary">Your session will expire in <span class="countdown mono">05:00</span></p>
+      <div class="modal-footer">
+        <button class="btn" onclick="SecurityManager.logout()">Logout</button>
+        <button class="btn btn-primary" onclick="SecurityManager.extendSession()">Extend Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../src/js/app.js"></script>
+</body>
+</html>
