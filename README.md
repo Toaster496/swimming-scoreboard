@@ -99,7 +99,7 @@
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-org/swim-score-pro.git
+git clone https://github.com/Toaster496/swimming-scoreboard.git
 cd swim-score-pro
 
 # 2. Open in browser (development)
